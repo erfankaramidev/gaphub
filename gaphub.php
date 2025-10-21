@@ -31,7 +31,7 @@ define( 'GH_DB_VERSION', '1.0' );
 define( 'GH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GH_URL', plugin_dir_url( __FILE__ ) );
 
-// Check for basic requirements
+// Check for basic requirements.
 if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 	add_action( 'admin_notices', function () {
 		echo '<div class="notice notice-error"><p>';
@@ -45,3 +45,21 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 
 	return;
 }
+
+// Ensure Composer autoloader is loaded.
+if ( ! file_exists( GH_PATH . 'vendor/autoload.php' ) ) {
+	add_action( 'admin_notices', function () {
+		echo '<div class="notice notice-error"><p>';
+		echo esc_html__( 'Gaphub plugin requires Composer autoloader. Please run composer install.', 'gaphub' );
+		echo '</p></div>';
+	} );
+
+	return;
+}
+require_once GH_PATH . 'vendor/autoload.php';
+
+// Initialize the plugin.
+function gh_run_plugin() {
+	return \Gaphub\Plugin::instance();
+}
+add_action( 'plugins_loaded', 'gh_run_plugin' );

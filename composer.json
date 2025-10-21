@@ -1,11 +1,16 @@
 {
-    "name": "erfankaramidev/gaphub",
-    "description": "Enhance the WordPress comments with Gaphub - a plugin that adds styling. Fully customizable, lightweight, and responsive.",
-    "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "Erfan Karami"
-        }
-    ],
-    "require": {}
+  "name": "erfankaramidev/gaphub",
+  "description": "Enhance the WordPress comments with Gaphub - a plugin that adds styling. Fully customizable, lightweight, and responsive.",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Erfan Karami"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Gaphub\\": "includes/"
+    }
+  }
 }
