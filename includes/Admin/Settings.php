@@ -14,56 +14,77 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 final class Settings {
+
 	private $option_group = 'gh_settings_group';
 	private $option_name  = 'gh_settings';
 	private $menu_slug    = 'gaphub-settings';
 
+	/**
+	 * @var array Defines all settings fields.
+	 */
 	private $fields = [
+		// ====== Style Settings Section ======
 		'primary_color'          => [
 			'label'   => 'Primary Color',
 			'type'    => 'color',
 			'default' => '#2b8cff',
+			'section' => 'styles',
 		],
 		'comment_bg_color'       => [
 			'label'   => 'Comment Background',
 			'type'    => 'color',
 			'default' => '#f9f9f9',
+			'section' => 'styles',
 		],
 		'base_font_size_px'      => [
 			'label'   => 'Base Font Size (px)',
 			'type'    => 'px',
 			'default' => 16,
 			'attrs'   => [ 'min' => 8, 'max' => 72 ],
+			'section' => 'styles',
 		],
 		'heading_font_size_px'   => [
 			'label'   => 'Heading Font Size (px)',
 			'type'    => 'px',
 			'default' => 24,
 			'attrs'   => [ 'min' => 10, 'max' => 120 ],
+			'section' => 'styles',
 		],
 		'field_border_radius_px' => [
 			'label'   => 'Field Border Radius (px)',
 			'type'    => 'px',
 			'default' => 4,
 			'attrs'   => [ 'min' => 0, 'max' => 100 ],
+			'section' => 'styles',
 		],
 		'gap_px'                 => [
 			'label'   => 'Gap (px)',
 			'type'    => 'px',
 			'default' => 12,
 			'attrs'   => [ 'min' => 0, 'max' => 200 ],
+			'section' => 'styles',
 		],
 		'input_padding_px'       => [
 			'label'   => 'Input Padding (px)',
 			'type'    => 'px',
 			'default' => 8,
 			'attrs'   => [ 'min' => 0, 'max' => 100 ],
+			'section' => 'styles',
 		],
 	];
 
 	public function register_hooks() {
 		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
+	}
+
+	public function enqueue_admin_scripts( $hook ) {
+		if ( $hook === "settings_page_{$this->menu_slug}" ) {
+			// Enqueue WordPress color picker
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );
+		}
 	}
 
 	public function add_admin_menu() {
@@ -88,6 +109,11 @@ final class Settings {
 				?>
 			</form>
 		</div>
+		<script>
+			jQuery(document).ready(function ($) {
+				$('.gh-color-picker').wpColorPicker();
+			});
+		</script>
 		<?php
 	}
 
@@ -97,7 +123,7 @@ final class Settings {
 		] );
 
 		add_settings_section(
-			'gh_style_section',
+			'gh_styles_section',
 			__( 'Default Styles', 'gaphub' ),
 			'__return_null',
 			$this->menu_slug
@@ -109,7 +135,7 @@ final class Settings {
 				__( $meta['label'], 'gaphub' ),
 				[ $this, 'render_field' ],
 				$this->menu_slug,
-				'gh_style_section',
+				'gh_' . $meta['section'] . '_section',
 				[
 					'name' => $name,
 					'meta' => $meta
@@ -118,49 +144,64 @@ final class Settings {
 		}
 	}
 
+	/**
+	 * Render each field based on its type
+	 */
 	public function render_field( $args ) {
 		$name    = $args['name'];
 		$meta    = $args['meta'];
 		$default = $meta['default'] ?? '';
 		$value   = $this->get_option( $name, $default );
+		$key     = "{$this->option_name}[{$name}]";
+		$desc    = $meta['desc'] ?? '';
 
-		if ( $meta['type'] === 'color' ) {
-			printf(
-				'<input type="color" name="%s" value="%s" class="color-picker" data-default-color="%s">',
-				$name,
-				esc_attr( $value ),
-				esc_attr( $default )
-			);
+		switch ( $meta['type'] ) {
+			case 'color':
+				printf(
+					'<input type="color" name="%s" value="%s" class="gh-color-picker" data-default-color="%s">',
+					esc_attr( $key ),
+					esc_attr( (string) $value ),
+					esc_attr( (string) $default )
+				);
+				break;
+			case 'px':
+				$min = $meta['attrs']['min'] ?? 0;
+				$max = $meta['attrs']['max'] ?? 999;
 
-			return;
-		} elseif ( $meta['type'] === 'px' ) {
-			printf(
-				'<input type="number" name="%s" value="%s" min="%s" max="%s">',
-				$name,
-				esc_attr( $value ),
-				esc_attr( $meta['attrs']['min'] ),
-				esc_attr( $meta['attrs']['max'] )
-			);
-
-			return;
+				printf(
+					'<input type="number" name="%s" value="%s" min="%s" max="%s">',
+					esc_attr( $key ),
+					esc_attr( $value ),
+					esc_attr( (string) $min ),
+					esc_attr( (string) $max )
+				);
+				break;
+			case 'text':
+			default:
+				printf(
+					'<input type="text" name="%s" value="%s" class="regular-text">',
+					esc_attr( $key ),
+					esc_attr( (string) $value ),
+				);
 		}
 
-		printf(
-			'<input type="text" name="%s" value="%s">',
-			$name,
-			esc_attr( $value ),
-		);
+		if ( $desc ) {
+			printf(
+				'<p class="description">%s</p>',
+				esc_html( $desc )
+			);
+		}
 	}
 
+	/**
+	 * Sanitize each field based on its type
+	 */
 	public function sanitize( $input ) {
 		$sanitized = [];
+		$options   = get_option( $this->option_name, [] );
 
 		foreach ( $this->fields as $key => $meta ) {
-			if ( ! isset( $input[ $key ] ) ) {
-				return;
-			}
-
-			$value = $input[ $key ];
+			$value = $input[ $key ] ?? $meta['default'];
 
 			switch ( $meta['type'] ) {
 				case 'color':
@@ -178,12 +219,16 @@ final class Settings {
 			}
 		}
 
-		return $sanitized;
+		return array_merge( $options, $sanitized );
 	}
 
 	public function get_option( $key, $default = '' ) {
-		$options = get_option( $this->option_name );
+		$options = get_option( $this->option_name, [] );
 
-		return ( isset( $options[ $key ] ) && ! empty( $options[ $key ] ) ) ? $options[ $key ] : $default;
+		if ( ! isset( $options[ $key ] ) ) {
+			return $this->fields[ $key ]['default'] ?? $default;
+		}
+
+		return $options[ $key ];
 	}
 }

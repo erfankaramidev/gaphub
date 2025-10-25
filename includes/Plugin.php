@@ -21,6 +21,8 @@ final class Plugin {
 
 	public $template_override;
 
+	public $assets;
+
 	public function __construct() {
 		$this->load_dependencies();
 		$this->init_hooks();
@@ -37,10 +39,16 @@ final class Plugin {
 	private function load_dependencies() {
 		$this->settings          = new Admin\Settings();
 		$this->template_override = new Core\TemplateOverride();
+		$this->assets            = new Core\Assets();
 	}
 
 	private function init_hooks() {
 		$this->settings->register_hooks();
 		$this->template_override->register_hooks();
+		$this->assets->register_hooks();
+	}
+
+	public function get_settings() {
+		return $this->settings;
 	}
 }
