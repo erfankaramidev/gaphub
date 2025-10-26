@@ -17,17 +17,25 @@ interface CommentProviderInterface {
 
 	/**
 	 * Get comments for a specific post.
-	 * 
-	 * @param int $post_id
 	 * @return CommentData[] An array of CommentData objects.
 	 */
-	public function get_comments( int $post_id ): array;
+	public function get_comments( $post_id );
 
 	/**
 	 * Get the HTML for the comment form.
-	 * 
-	 * @param int $post_id
 	 * @return string The comment form HTML.
 	 */
-	public function get_form( int $post_id ): string;
+	public function get_form( $post_id );
+
+	/**
+	 * Gets the count of top-level comments for pagination.
+	 * @return int
+	 */
+	public function get_comments_count( $post_id );
+
+	/**
+	 * Gets the total count of all comments for display.
+	 * @return int
+	 */
+	public function get_total_comments_count( $post_id );
 }

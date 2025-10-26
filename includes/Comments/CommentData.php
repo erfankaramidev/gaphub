@@ -17,27 +17,54 @@ final class CommentData {
 
 	private $comment;
 
+	/**
+	 * @var CommentData[]
+	 */
+	private $children = [];
+
 	public function __construct( \WP_Comment $comment ) {
 		$this->comment = $comment;
 	}
 
 	public function get_id() {
-		return $this->comment->comment_ID;
+		return (int) $this->comment->comment_ID;
 	}
 
-	public function get_author(): string {
+	public function get_parent_id() {
+		return (int) $this->comment->comment_parent;
+	}
+
+	public function get_author() {
 		return get_comment_author( $this->comment );
 	}
 
-	public function get_avatar_url(): string {
-		return get_avatar_url( $this->comment->comment_author_email );
+	public function get_avatar_url() {
+		return get_avatar_url( get_comment_author_email( $this->comment ) );
 	}
 
-	public function get_content(): string {
+	public function get_content() {
 		return get_comment_text( $this->comment );
 	}
 
-	public function get_date( $format = '' ): string {
+	public function get_date( $format = '' ) {
 		return get_comment_date( $format, $this->comment );
+	}
+
+	/**
+	 * @param CommentData $comment
+	 */
+	public function add_child( $comment ) {
+		$this->children[] = $comment;
+	}
+
+	/**
+	 * @return CommentData[]
+	 */
+	public function get_children() {
+		return $this->children;
+	}
+
+	public function has_children() {
+		return ! empty( $this->children );
 	}
 }
