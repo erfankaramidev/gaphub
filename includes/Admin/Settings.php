@@ -33,7 +33,19 @@ final class Settings {
 		'primary_color_hover' => [
 			'label'   => 'Primary Color Hover',
 			'type'    => 'color',
-			'default' => '#167fffff',
+			'default' => '#0776ff',
+			'section' => 'styles',
+		],
+		'text_dark_color' => [
+			'label'   => 'Text Dark Color',
+			'type'    => 'color',
+			'default' => '#333333',
+			'section' => 'styles',
+		],
+		'text_light_color' => [
+			'label'   => 'Text Light Color',
+			'type'    => 'color',
+			'default' => '#666666',
 			'section' => 'styles',
 		],
 		'comment_bg_color'    => [
