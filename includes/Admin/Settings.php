@@ -24,51 +24,49 @@ final class Settings {
 	 */
 	private $fields = [
 		// ====== Style Settings Section ======
-		'primary_color'          => [
+		'primary_color'       => [
 			'label'   => 'Primary Color',
 			'type'    => 'color',
 			'default' => '#2b8cff',
 			'section' => 'styles',
 		],
-		'comment_bg_color'       => [
+		'primary_color_hover' => [
+			'label'   => 'Primary Color Hover',
+			'type'    => 'color',
+			'default' => '#167fffff',
+			'section' => 'styles',
+		],
+		'comment_bg_color'    => [
 			'label'   => 'Comment Background',
 			'type'    => 'color',
 			'default' => '#f9f9f9',
 			'section' => 'styles',
 		],
-		'base_font_size_px'      => [
-			'label'   => 'Base Font Size (px)',
-			'type'    => 'px',
-			'default' => 16,
-			'attrs'   => [ 'min' => 8, 'max' => 72 ],
+		'border_color'        => [
+			'label'   => 'Border Color',
+			'type'    => 'color',
+			'default' => '#e5e5e5',
 			'section' => 'styles',
 		],
-		'heading_font_size_px'   => [
+		'heading_font_size'   => [
 			'label'   => 'Heading Font Size (px)',
 			'type'    => 'px',
 			'default' => 24,
 			'attrs'   => [ 'min' => 10, 'max' => 120 ],
 			'section' => 'styles',
 		],
-		'field_border_radius_px' => [
-			'label'   => 'Field Border Radius (px)',
+		'border_radius'       => [
+			'label'   => 'Border Radius (px)',
 			'type'    => 'px',
 			'default' => 4,
 			'attrs'   => [ 'min' => 0, 'max' => 100 ],
 			'section' => 'styles',
 		],
-		'gap_px'                 => [
+		'gap'                 => [
 			'label'   => 'Gap (px)',
 			'type'    => 'px',
 			'default' => 12,
 			'attrs'   => [ 'min' => 0, 'max' => 200 ],
-			'section' => 'styles',
-		],
-		'input_padding_px'       => [
-			'label'   => 'Input Padding (px)',
-			'type'    => 'px',
-			'default' => 8,
-			'attrs'   => [ 'min' => 0, 'max' => 100 ],
 			'section' => 'styles',
 		],
 	];

@@ -26,6 +26,7 @@ final class CommentRenderer {
 
 	/**
 	 * Renders an array of comments.
+	 * 
 	 * @param \Gaphub\Comments\CommentData[] $comments
 	 */
 	public static function render_comments_list( $comments ) {
@@ -34,6 +35,11 @@ final class CommentRenderer {
 		}
 	}
 
+	/**
+	 * Renders comment pagination.
+	 * 
+	 * @param int $top_level_comment_count
+	 */
 	public static function render_pagination( $top_level_comment_count ) {
 		if ( get_option( 'page_comments' ) ) {
 			$per_page    = (int) get_option( 'comments_per_page' );
