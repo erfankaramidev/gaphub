@@ -210,6 +210,12 @@
   border: 0;
 }
 
+#cancel-comment-reply-link {
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 6x;
+}
+
 @media (max-width: 600px) {
   .gh-global-wrapper {
     padding: var(--gh-gap);

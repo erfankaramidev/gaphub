@@ -27,6 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</h3>
 	<ol id="gh-comment-list" class="gh-comment-list">
-		<?php CommentRenderer::render_comments_list( $comments ) ?>
+		<?php CommentRenderer::render_comments_list( $comments, 1 ) ?>
 	</ol>
 </div>

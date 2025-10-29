@@ -56,12 +56,10 @@ final class Assets {
 		wp_add_inline_style( 'gaphub-style', $inline_css );
 
 		// ====== Scripts ======
-		wp_enqueue_script(
-			'gaphub-script',
-			GH_URL . 'assets/js/gaphub-script.js',
-			[],
-			GH_VERSION,
-			true
-		);
+
+		// If the page is a comment page, load the comment reply script
+		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+			wp_enqueue_script( 'comment-reply' );
+		}
 	}
 }

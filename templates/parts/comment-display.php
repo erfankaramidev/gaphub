@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <li class="gh-comment-item" data-comment-id="<?php echo $comment->get_id(); ?>"
-	id="gh-comment-<?php echo $comment->get_id(); ?>">
+	id="comment-<?php echo $comment->get_id(); ?>">
 	<article class="gh-comment-body">
 		<img class="gh-comment-avatar" src="<?php echo esc_url( $comment->get_avatar_url() ); ?>"
 			alt="<?php echo esc_attr( $comment->get_author() ); ?>" loading="lazy" />
@@ -31,15 +31,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<p><?php echo wpautop( wp_kses_post( $comment->get_content() ) ) ?></p>
 			</div>
 			<footer class="gh-comment-footer">
-				<button class="gh-reply-btn" data-comment-id="<?php echo $comment->get_id(); ?>"
-					data-comment-author="<?php echo $comment->get_author() ?>">Reply</button>
+				<?php
+				echo get_comment_reply_link( [
+					'reply_text' => __( 'Reply', 'gaphub' ),
+					'show_reply_to_text' => false,
+					'depth'      => $depth,
+					'max_depth'  => get_option( 'thread_comments_depth' ),
+					'before'     => '',
+					'after'      => '',
+					'class'      => 'gh-reply-link'
+				],
+					$comment->get_id(),
+					get_the_ID() );
+				?>
 			</footer>
 		</div>
 	</article>
 
 	<?php if ( $comment->has_children() ) : ?>
 		<ol class="gh-children">
-			<?php CommentRenderer::render_comments_list( $comment->get_children() ) ?>
+			<?php CommentRenderer::render_comments_list( $comment->get_children(), $depth + 1 ) ?>
 		</ol>
 	<?php endif; ?>
 </li>

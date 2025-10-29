@@ -18,20 +18,22 @@ final class CommentRenderer {
 	/**
 	 * Renders a single comment template.
 	 * 
-	 * @param \Gaphub\Comments\CommentData $comment
+	 * @param \Gaphub\Comments\CommentData $comment The comment to render.
+	 * @param int $depth The current comment depth.
 	 */
-	public static function render_comment( $comment ) {
+	public static function render_comment( $comment, $depth ) {
 		include GH_PATH . 'templates/parts/comment-display.php';
 	}
 
 	/**
 	 * Renders an array of comments.
 	 * 
-	 * @param \Gaphub\Comments\CommentData[] $comments
+	 * @param \Gaphub\Comments\CommentData[] $comments Array of comments to render.
+	 * @param int $depth The current comment depth.
 	 */
-	public static function render_comments_list( $comments ) {
+	public static function render_comments_list( $comments, $depth = 1 ) {
 		foreach ( $comments as $comment ) {
-			self::render_comment( $comment );
+			self::render_comment( $comment, $depth );
 		}
 	}
 
