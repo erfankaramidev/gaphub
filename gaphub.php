@@ -27,7 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Plugin Constants
 define( 'GH_VERSION', '1.0.0' );
-define( 'GH_DB_VERSION', '1.0' );
 define( 'GH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GH_URL', plugin_dir_url( __FILE__ ) );
 
